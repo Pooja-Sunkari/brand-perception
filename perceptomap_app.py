@@ -72,7 +72,7 @@ if uploaded_file is not None:
                    color=cluster_colors(row["cluster"]), 
                    alpha=0.85, edgecolors="black")
         ax.text(row["Dim1"], row["Dim2"], row["brand"], 
-                ha='center', va='center', fontsize=9, color='white', weight='bold')
+                ha='center', va='center', fontsize=9, color='black', weight='bold')
 
     ax.set_title("🎈 Where Each Brand Stands in the Market", fontsize=16)
     ax.set_xlabel("Dimension 1 (🧠 Style + Innovation)", fontsize=12)
