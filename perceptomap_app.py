@@ -72,18 +72,38 @@ if uploaded_file is not None:
     kmeans = KMeans(n_clusters=k, random_state=42)
     clusters = kmeans.fit_predict(mds_coords)
     plot_data['cluster'] = clusters
-
-    # 📊 Draw a scatter plot that shows the brands on our magical map.
-    fig, ax = plt.subplots(figsize=(8, 6))
-    sns.scatterplot(x="Dim1", y="Dim2", hue="cluster", data=plot_data,
-                    palette="Set1", style="cluster", s=100, ax=ax)
     
-    # Mark the cluster centers (like where the friends hang out together!)
-    centers = kmeans.cluster_centers_
-    ax.scatter(centers[:, 0], centers[:, 1], c='black', s=200, marker='X', label='Center')
-    ax.set_title("2D Perceptual Map with Clusters")
-    ax.legend()
-    st.pyplot(fig)
+    # 🖼️ Beautiful and Easy-to-Understand Map
+st.subheader("🖼️ Brand Perception Map (Easy View)")
+
+fig, ax = plt.subplots(figsize=(10, 6))
+colors = plt.cm.tab10(clusters)
+
+# Draw each brand as a big dot with name
+for i in range(len(points_2d)):
+    x, y = points_2d[i]
+    ax.scatter(x, y, s=300, color=colors[i], alpha=0.8, edgecolors='black')
+    ax.text(x, y, filtered_df['brand'].iloc[i], fontsize=10, ha='center', va='center', color='white', fontweight='bold')
+
+# Add friendly labels
+ax.set_title("🎈 Where Each Brand Stands in the Market", fontsize=16, fontweight='bold')
+ax.set_xlabel("Dimension 1 (🧠 Style + Innovation)", fontsize=12)
+ax.set_ylabel("Dimension 2 (❤️ Comfort + Popularity)", fontsize=12)
+
+# Clean look: no box or ticks
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.grid(True, linestyle='--', alpha=0.3)
+
+# Legend: group names (Cluster 1, 2, etc.)
+for cluster_id in range(k):
+    ax.scatter([], [], color=plt.cm.tab10(cluster_id), label=f"Group {cluster_id+1}")
+ax.legend(title="🎨 Clusters (Friend Circles)")
+
+st.pyplot(fig)
+
+
+ 
 
     # 🕵️‍♀️ Highlighting market gaps:
     # One simple idea: look for clusters that are very small (few brands) as they might be 'empty' or underpopulated.
